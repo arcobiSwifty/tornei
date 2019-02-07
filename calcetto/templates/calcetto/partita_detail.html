@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+{% if object.finita %}<div class="alert alert-info"> questa partita è finita ({{ object.result }})</div>{% endif %}
+<h1>{{ object.squadra_1.classe }} vs {{ object.squadra_2.classe }}</h1>
+<p>{{ object.iniziata_il|date }}</p>
+<b>Goals</b>
+<div>
+<table class="table table-striped">
+  <thead>
+    <th>Minuto</th>
+    <th>Compiuto da</th>
+    <th>Squadra</th>
+  </thead>
+  <tbody>
+    {% for goal in goals %}
+      <tr>
+        <td>{{goal.minuto}}'</td>
+        <td>{{goal.giocatore.nome}}</td>
+        <td>{{goal.squadra.classe}}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+</div> 
+
+
+
+
+{% endblock %}

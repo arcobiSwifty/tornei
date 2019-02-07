@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+  <h1>{{partita.squadra_1.classe}} vs {{partita.squadra_2.classe}}</h1>
+  <p>{{partita.iniziata_il|date}}</p>
+  <p>{{partita.result}}</p>
+
+  <table class="table table-striped">
+    <thead>
+      <th>Minuto</th>
+      <th>Compiuto da</th>
+      <th>Squadra</th>
+      <th>Azioni</th>
+    </thead>
+    <tbody>
+      {% for goal in goals %}
+        <tr>
+          <td>{{goal.minuto}}'
+          <td>{{goal.giocatore.nome}}</td>
+          <td>{{goal.squadra.classe}}</td>
+          <td>{% if partita.finita == False %}<a href="/calcetto/elimina/{{goal.id}}/p?partita={{partita.id}}"><button class="btn btn-warning">Elimina</button></a> <a href="/calcetto/modifica/{{goal.id}}/p?partita={{partita.id}}"><button class="btn btn-danger">Modifica</button></a>{% endif %}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  Aggiungi un goal:
+  <form class="form form.control" action="/calcetto/arbitra/{{partita.id}}" method="post">
+    {% csrf_token %}
+    {{form.as_p}}
+    <button type="submit" name="button">Aggiungi</button>
+  </form>
+
+  <style media="screen">
+    .squadre {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+  </style>
+  <div class="squadre">
+    <table class="table table-striped">
+      <thead>
+        <th>{{partita.squadra_1.classe}}</th>
+      </thead>
+      <tbody>
+        {% for calciatore in squadra1 %}
+          <tr><td>{{calciatore.nome}}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <table class="table table-striped">
+      <thead>
+        <th>{{partita.squadra_2.classe}}</th>
+      </thead>
+      <tbody>
+        {% for calciatore in squadra2 %}
+        <tr><td>{{calciatore.nome}}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+
+{% endblock %}

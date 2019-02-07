@@ -1,0 +1,4 @@
+<form method="post">{% csrf_token %}
+    <p>Vuoi veramente eliminare "{{ object.giocatore }} ({{ object.minuto }}')"?</p>
+    <input type="submit" value="Elimina">
+</form>

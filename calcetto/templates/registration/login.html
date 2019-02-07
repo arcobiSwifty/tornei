@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% if form.errors %}
+  <b>Password o username errati</b>
+{% endif %}
+
+
+{% if next %}
+    {% if user.is_authenticated %}
+    <p>Sei già autenticato come {{ user.username }}, ma non hai il permesso di visualizzare questa pagina.</p>
+    {% else %}
+    <p>Devi autenticarti prima di poter accedere a questa pagina.</p>
+    {% endif %}
+{% else %}
+{% if user.is_authenticated %}
+  <p>Sei già autenticato come {{ user.username }}!<a href='/accounts/logout'>Clicca qua</a> per eseguire il logout.</p>
+{% else %}
+  <p>Inserisci il tuo nome utente e la tua password.</p>
+{% endif %}
+{% endif %}
+
+
+<form method="post" action="/accounts/login" class="form form-control">
+  {% csrf_token %}
+  <table>
+    <tr>
+      <td>{{ form.username.label_tag }}</td>
+      <td>{{ form.username }}</td>
+    </tr>
+    <tr>
+      <td>{{ form.password.label_tag }}</td>
+      <td>{{ form.password }}</td>
+    </tr>
+  </table>
+  <input type="submit" value="login" />
+  <input type="hidden" name="next" value="{{ next }}" />
+
+</form>
+{% endblock %}
