@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 
 from .models import *
-from .forms import CreaGoal
+from .forms import *
 
 from django.views import View
 from django.views.generic.edit import FormView, CreateView, DeleteView, UpdateView
@@ -11,7 +11,7 @@ from django.core.paginator import Paginator
 
 # Create your views here.
 class ListPartite(ListView):
-    queryset = Partita.objects.all()
+    queryset = Partita.objects.order_by('iniziata_il')
     paginate_by = 20
 
 class DetailPartite(DetailView):
@@ -28,7 +28,7 @@ class EditGoal(UpdateView):
     def get_success_url(self):
         return '/calcetto/arbitra/{0}'.format(self.request.GET.get('partita'))
 
-class DeleteGoal(UpdateView):
+class DeleteGoal(DeleteView):
     model = Goal
     def get_success_url(self):
         return '/calcetto/arbitra/{0}'.format(self.request.GET.get('partita'))
@@ -50,5 +50,30 @@ class ArbitraPartite(View):
             goal.squadra = Squadra.objects.get(calciatori__nome=goal.giocatore.nome)
             goal.save()
             partita.goals.add(goal)
+            if goal.squadra == partita.squadra_1:
+                partita.result = "{}-{}".format(int(partita.result[0])+1, partita.result[2])
+            elif goal.squadra == partita.squadra_2:
+                partita.result = "{}-{}".format(partita.result[0], int(partita.result[2])+1)
             partita.save()
             return redirect('/calcetto/arbitra/{}'.format(pk))
+
+class FinisciPartita(View):
+    def get(self, request, pk):
+         return render(request, 'calcetto/partita_end.html', {'partita': pk})
+    def post(self, request, pk):
+        partita = Partita.objects.get(pk=pk)
+        partita.finita = True
+        partita.save()
+        return redirect('/calcetto')
+
+class CreatePartita(CreateView):
+    template_name = "calcetto/partita_create.html"
+    form_class = CreaPartita
+    success_url = '/calcetto'
+    def form_valid(self, form):
+        partita = form.save(commit=False)
+        partita.result = "0-0"
+        partita.finita = False
+        partita.iniziata_il = form.cleaned_data['iniziata']
+        partita.save()
+        return super().form_valid(form)

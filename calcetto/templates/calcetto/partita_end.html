@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+
+
+{% block content %}
+<div class="container">
+  <div id="success"></div>
+  <p>Vuoi veramente terminare questa partita?</p>
+  <a><button class="btn btn-info">No</button></a>
+  <button class="btn btn-warning" onclick="finisci_partita({{partita}})">Si</button>
+</div>
+<script>
+  function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+      var cookies = document.cookie.split(';');
+      for (var i = 0; i < cookies.length; i++) {
+        var cookie = jQuery.trim(cookies[i]);
+        if (cookie.substring(0, name.length + 1) == (name + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+  function csrfSafeMethod(method) {
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+  }
+
+  function finisci_partita(id_partita){
+      var csrftoken = getCookie('csrftoken');
+      $.ajax({
+        beforeSend: function(xhr, settings) {
+          if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+          }
+        },
+        url: '/calcetto/finisci/{{partita}}',
+        data: {
+          'partita': id_partita
+        },
+        method: 'POST',
+        datatype: 'JSON',
+        success: function(data) {
+          window.location.href = "/calcetto";
+        }
+      });
+    };
+</script>
+
+{% endblock %}

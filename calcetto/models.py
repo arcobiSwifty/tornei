@@ -38,12 +38,12 @@ class Goal(models.Model):
         return self.giocatore.nome + " (" + str(self.minuto) + "')"
 
 class Partita(models.Model):
-    iniziata_il = models.DateTimeField(blank=True, null=True)
+    iniziata_il = models.DateTimeField('iniziata', blank=True, null=True)
     finita_il = models.DateTimeField(blank=True, null=True)
     squadra_1 = models.ForeignKey(Squadra, on_delete=models.CASCADE, related_name="squadra_1")
     squadra_2 = models.ForeignKey(Squadra, on_delete=models.CASCADE, related_name="squadra_2")
     goals = models.ManyToManyField(Goal)
-    result = models.CharField(default="", blank=True, null=True, max_length=10)
+    result = models.CharField(default="0-0", blank=True, null=True, max_length=10)
     finita = models.BooleanField(default=False)
 
     def __str__(self):
