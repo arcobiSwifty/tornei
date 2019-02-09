@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container">
   <h1>{{partita.squadra_1.classe}} vs {{partita.squadra_2.classe}}</h1>
-  <p>{{partita.iniziata_il|date}}</p>
+  <p>{{partita.data|date}}</p>
   <p>{{partita.result}}</p>
 
   <table class="table table-striped">

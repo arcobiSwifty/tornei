@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 
 urlpatterns = [
+    path('', views.Main.as_view()),
     path('calcetto', views.ListPartite.as_view()),
     path('accounts/login',  auth_views.LoginView.as_view()),
     path('calcetto/nuovapartita/', staff_member_required(views.CreatePartita.as_view())),

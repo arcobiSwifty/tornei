@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+  <h3>Tornei presenti: </h3>
+  <button class="btn btn-primary">Calcetto</button>
+  <button class="btn btn-primary">Pallavolo</button>
+  <br><br>
+  {% if is_staff %}
+      <table class="table table-striped">
+        <thead>
+          <th>Calcetto</th>
+          <th>Pallavolo</th>
+        </thead>
+        <tbody>
+          <tr>
+            <td><button class="btn btn-primary">Aggiungi squadra</button></td>
+            <td><button class="btn btn-primary">Aggiungi squadra</button></td>
+          </tr>
+          <tr>
+            <td><button class="btn btn-primary">Aggiungi partita</button></td>
+            <td><button class="btn btn-primary">Aggiungi partita</button></td>
+          </tr>
+        </tbody>
+      </table>
+  {% endif %}
+  </div>
+
+{% endblock %}

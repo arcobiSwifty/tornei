@@ -4,7 +4,7 @@
 <div class="container">
 {% if object.finita %}<div class="alert alert-info"> questa partita è finita ({{ object.result }})</div>{% endif %}
 <h1>{{ object.squadra_1.classe }} vs {{ object.squadra_2.classe }}</h1>
-<p>{{ object.iniziata_il|date }}</p>
+<p>{{ object.data|date }}</p>
 <b>Goals</b>
 <div>
 <table class="table table-striped">

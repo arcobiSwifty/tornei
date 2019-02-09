@@ -9,9 +9,17 @@ from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.core.paginator import Paginator
 
+#todo implement scheduled tasks
+#implement classifica
+#implement cartellini e ammonizioni 
+
 # Create your views here.
+class Main(View):
+    def get(self, request):
+        return render(request, 'start.html', {'is_staff': self.request.user.is_staff})
+
 class ListPartite(ListView):
-    queryset = Partita.objects.order_by('iniziata_il')
+    queryset = Partita.objects.order_by('data')
     paginate_by = 20
 
 class DetailPartite(DetailView):
@@ -63,6 +71,20 @@ class FinisciPartita(View):
     def post(self, request, pk):
         partita = Partita.objects.get(pk=pk)
         partita.finita = True
+        score = partita.result
+        squadra1 = score[0]
+        squadra2 = score[2]
+        if int(squadra1) > int(squadra2):
+            s = Squadra.objects.get(pk=squadra1.id)
+            s.score += 1
+            s.save()
+        elif int(squadra1) == int(squadra2):
+            print("parità")
+        elif int(squadra1) < int(squadra2):
+            s = Squadra.objects.get(pk=squadra2.id)
+            s.score += 1
+            s.save()
+
         partita.save()
         return redirect('/calcetto')
 
@@ -74,6 +96,6 @@ class CreatePartita(CreateView):
         partita = form.save(commit=False)
         partita.result = "0-0"
         partita.finita = False
-        partita.iniziata_il = form.cleaned_data['iniziata']
+        partita.data = form.cleaned_data['data']
         partita.save()
         return super().form_valid(form)

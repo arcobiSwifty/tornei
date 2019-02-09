@@ -30,7 +30,7 @@ class Migration(migrations.Migration):
             name='Partita',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('iniziata_il', models.DateTimeField(blank=True, null=True)),
+                ('data', models.DateTimeField(blank=True, null=True)),
                 ('finita_il', models.DateTimeField(blank=True, null=True)),
                 ('result', models.CharField(blank=True, default='', max_length=10, null=True)),
                 ('finita', models.BooleanField(default=False)),

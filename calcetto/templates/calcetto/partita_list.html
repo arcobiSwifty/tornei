@@ -13,7 +13,7 @@
   </thead>
 {% for partita in object_list %}
     <tr>
-      <td>{{ partita.iniziata_il|date }}</td>
+      <td>{{ partita.data|date }}</td>
       <td> {{ partita.squadra_1.classe }} vs {{ partita.squadra_2.classe }}</td>
       <td> {% if partita.finita %}(conclusa: {{ partita.result }}){% else %}da giocare{% endif %}</td>
       <td><a href="/calcetto/dettagli/{{partita.id}}"><button class="btn btn-info">Dettagli</button></a></td>

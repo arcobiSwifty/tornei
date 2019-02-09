@@ -24,6 +24,7 @@ class Squadra(models.Model):
     calciatori = models.ManyToManyField(Studente)
     score = models.IntegerField(default=0)
     eliminata = models.BooleanField(default=False)
+    contatto = models.EmailField(null=True, blank=True)
 
     def __str__(self):
         return self.classe
@@ -38,13 +39,13 @@ class Goal(models.Model):
         return self.giocatore.nome + " (" + str(self.minuto) + "')"
 
 class Partita(models.Model):
-    iniziata_il = models.DateTimeField('iniziata', blank=True, null=True)
-    finita_il = models.DateTimeField(blank=True, null=True)
+    data = models.DateTimeField('data', blank=True, null=True)
     squadra_1 = models.ForeignKey(Squadra, on_delete=models.CASCADE, related_name="squadra_1")
     squadra_2 = models.ForeignKey(Squadra, on_delete=models.CASCADE, related_name="squadra_2")
     goals = models.ManyToManyField(Goal)
     result = models.CharField(default="0-0", blank=True, null=True, max_length=10)
     finita = models.BooleanField(default=False)
+    email_sent = models.BooleanField(default=False)
 
     def __str__(self):
         return self.squadra_1.classe + " vs " + self.squadra_2.classe + " " + self.result
