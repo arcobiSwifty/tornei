@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+{% if object.finita %}<div class="alert alert-info"> questa partita è finita ({{ object.result }})</div>{% endif %}
+<h1>{{ object.nome }}</h1>
+<p>Goal fatti: {{ object.goals }}, in {{ partite_count }} partite</p>
+<div>
+<table class="table table-striped">
+  <thead>
+    <th>Partita</th>
+    <th>Tipo</th>
+    <th>Data</th>
+  </thead>
+  <tbody>
+    {% for ammonizione in ammonizioni %}
+      <tr>
+        <td>{{ammonizione.partita.squadra_1.classe}} vs {{ammonizione.partita.squadra_2.classe}}'</td>
+        <td>{{amonizione.tipi}}</td>
+        <td>{{ammonizione.partitadata|date}}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+</div>
+
+
+
+
+{% endblock %}

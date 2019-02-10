@@ -11,16 +11,34 @@ from django.core.paginator import Paginator
 
 #todo implement scheduled tasks
 #implement classifica
-#implement cartellini e ammonizioni 
+#implement cartellini e ammonizioni
 
 # Create your views here.
 class Main(View):
     def get(self, request):
         return render(request, 'start.html', {'is_staff': self.request.user.is_staff})
 
+class Classifica(ListView):
+    queryset = Studente.objects.order_by('-goals')
+    paginate_by = 20
+
+class StudenteDetail(DetailView):
+    model = Studente
+    def get_context_data(self, **kwargs):
+        context = super(StudenteDetail, self).get_context_data(**kwargs)
+        #non funziona
+        context['ammonizioni'] = Studente.objects.get(pk=self.kwargs['pk']).cartellini.all()
+        count = Partita.objects.filter(squadra_1__calciatori=Studente.objects.get(pk=self.kwargs['pk'])) | Partita.objects.filter(squadra_2__calciatori=Studente.objects.get(pk=self.kwargs['pk']))
+        context['partite_count'] = count.count()
+        return context
+
 class ListPartite(ListView):
     queryset = Partita.objects.order_by('data')
     paginate_by = 20
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        data['is_staff'] = self.request.user.is_staff
+        return data
 
 class DetailPartite(DetailView):
     model = Partita
@@ -36,10 +54,23 @@ class EditGoal(UpdateView):
     def get_success_url(self):
         return '/calcetto/arbitra/{0}'.format(self.request.GET.get('partita'))
 
+    def form_valid(self, form):
+        for studente in Studente.objects.all():
+            goals = Goal.objects.filter(giocatore=studente).count()
+            studente.goals = goals
+            studente.save()
+        return self.get_success_url()
+
 class DeleteGoal(DeleteView):
     model = Goal
     def get_success_url(self):
         return '/calcetto/arbitra/{0}'.format(self.request.GET.get('partita'))
+    def delete(self, *args, **kwargs):
+        self.object = self.get_object()
+        g = self.object.giocatore
+        g.goals -= 1
+        g.save()
+        return super(DeleteGoal, self).delete(*args, **kwargs)
 
 class ArbitraPartite(View):
     template_name = 'arbitra.html'
@@ -58,6 +89,9 @@ class ArbitraPartite(View):
             goal.squadra = Squadra.objects.get(calciatori__nome=goal.giocatore.nome)
             goal.save()
             partita.goals.add(goal)
+            studente = goal.giocatore
+            studente.goals += 1
+            studente.save()
             if goal.squadra == partita.squadra_1:
                 partita.result = "{}-{}".format(int(partita.result[0])+1, partita.result[2])
             elif goal.squadra == partita.squadra_2:
@@ -84,6 +118,16 @@ class FinisciPartita(View):
             s = Squadra.objects.get(pk=squadra2.id)
             s.score += 1
             s.save()
+        squadra_1_score = 0
+        for g in partita.squadra_1.calciatori.all():
+            prima = partita.goals.filter(giocatore=g).count()
+            squadra_1_score += prima
+        squadra_2_score = 0
+        for g in partita.squadra_2.calciatori.all():
+            prima = partita.goals.filter(giocatore=g).count()
+            squadra_2_score += prima
+        partita.result = '{}-{}'.format(squadra_1_score, squadra_2_score)
+
 
         partita.save()
         return redirect('/calcetto')

@@ -11,7 +11,7 @@ class CreaGoal(forms.ModelForm):
         }
 
 class CreaPartita(forms.ModelForm):
-    data = forms.DateField(required=True, input_formats=['%d-%m-%Y %H:%M', '%d/%m/%Y %H:%M'])
+    data = forms.DateTimeField(required=True, input_formats=['%d-%m-%Y %H:%M', '%d/%m/%Y %H:%M'])
     class Meta:
         model = Partita
         fields = ('squadra_1', 'squadra_2')

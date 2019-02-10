@@ -15,6 +15,7 @@ class Cartellino(models.Model):
 class Studente(models.Model):
     nome = models.CharField(max_length=100)
     cartellini = models.ManyToManyField(Cartellino)
+    goals = models.IntegerField(default=0)
 
     def __str__(self):
         return self.nome

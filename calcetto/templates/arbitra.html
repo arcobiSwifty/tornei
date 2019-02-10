@@ -3,8 +3,8 @@
 {% block content %}
 <div class="container">
   <h1>{{partita.squadra_1.classe}} vs {{partita.squadra_2.classe}}</h1>
-  <p>{{partita.data|date}}</p>
-  <p>{{partita.result}}</p>
+  <p>{{partita.data|date}}, {{partita.data.hour|add:"1"}}:{% if partita.data.minute < 10 %}0{{partita.data.minute}}{% else %}{{partita.data.minute}}{% endif %}</p>
+  <!--<p>{{partita.result}}</p>-->
 
   <table class="table table-striped">
     <thead>
@@ -38,8 +38,9 @@
     }
   </style>
   <br>
-  {% if partita.concluse == False %}
+  {% if partita.finita == False %}
   <a href="/calcetto/finisci/{{partita.id}}"><button class="btn btn-primary">Finisci Partita</button></a><br><br>
+  {% endif %}
   <div class="squadre">
     <table class="table table-striped">
       <thead>

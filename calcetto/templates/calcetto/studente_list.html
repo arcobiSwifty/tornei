@@ -2,24 +2,19 @@
 
 {% block content %}
 
-<br><a href="/calcetto/classifica">Classifica Giocatori<button class="btn btn-info"></button></a>
-
 <table class="table table-striped">
   <thead>
     <tr>
-      <th>Data</th>
-      <th>Classi</th>
-      <th>Stato</th>
+      <th>Nome</th>
+      <th>Goal</th>
       <th>#</th>
     </tr>
   </thead>
-{% for partita in object_list %}
+{% for studente in object_list %}
     <tr>
-      <td>{{ partita.data|date }}</td>
-      <td> {{ partita.squadra_1.classe }} vs {{ partita.squadra_2.classe }}</td>
-      <td> {% if partita.finita %}conclusa: <span>{{ partita.result }}</span>{% else %}da giocare{% endif %}</td>
-      <td><a href="/calcetto/dettagli/{{partita.id}}"><button class="btn btn-info">Dettagli</button></a>
-      {% if partita.finita == False %}{% if is_staff %}<br><br><a href="calcetto/arbitra/{{partita.id}}"><button class="btn btn-primary">Arbitreggia</button></a></td>{% endif %}{% endif %}
+      <td>{{ studente.nome }}</td>
+      <td>{{ studente.goals }}</td>
+      <td><a href="/calcetto/studente/{{studente.id}}"><button class="btn btn-secondary">Dettagli</button></a></td>
     </tr>
 {% empty %}
     <li>Non è ancora presente nessuna partita</li>
