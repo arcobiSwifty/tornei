@@ -103,19 +103,19 @@ class FinisciPartita(View):
     def get(self, request, pk):
          return render(request, 'calcetto/partita_end.html', {'partita': pk})
     def post(self, request, pk):
-        partita = Partita.objects.get(pk=pk)
+        partita = Partita.objects.get(pk=int(pk))
         partita.finita = True
         score = partita.result
         squadra1 = score[0]
         squadra2 = score[2]
         if int(squadra1) > int(squadra2):
-            s = Squadra.objects.get(pk=squadra1.id)
+            s = Squadra.objects.get(pk=partita.squadra_1.id)
             s.score += 1
             s.save()
         elif int(squadra1) == int(squadra2):
             print("parità")
         elif int(squadra1) < int(squadra2):
-            s = Squadra.objects.get(pk=squadra2.id)
+            s = Squadra.objects.get(pk=partita.squadra_2.id)
             s.score += 1
             s.save()
         squadra_1_score = 0

@@ -19,7 +19,7 @@
       <td> {{ partita.squadra_1.classe }} vs {{ partita.squadra_2.classe }}</td>
       <td> {% if partita.finita %}conclusa: <span>{{ partita.result }}</span>{% else %}da giocare{% endif %}</td>
       <td><a href="/calcetto/dettagli/{{partita.id}}"><button class="btn btn-info">Dettagli</button></a>
-      {% if partita.finita == False %}{% if is_staff %}<br><br><a href="calcetto/arbitra/{{partita.id}}"><button class="btn btn-primary">Arbitreggia</button></a></td>{% endif %}{% endif %}
+      {% if partita.finita == False %}{% if is_staff %}<a href="calcetto/arbitra/{{partita.id}}"><button class="btn btn-primary">Arbitreggia</button></a></td>{% endif %}{% endif %}
     </tr>
 {% empty %}
     <li>Non è ancora presente nessuna partita</li>
