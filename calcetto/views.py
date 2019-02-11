@@ -28,8 +28,10 @@ class StudenteDetail(DetailView):
         context = super(StudenteDetail, self).get_context_data(**kwargs)
         #non funziona
         context['ammonizioni'] = Studente.objects.get(pk=self.kwargs['pk']).cartellini.all()
-        count = Partita.objects.filter(squadra_1__calciatori=Studente.objects.get(pk=self.kwargs['pk'])) | Partita.objects.filter(squadra_2__calciatori=Studente.objects.get(pk=self.kwargs['pk']))
-        context['partite_count'] = count.count()
+        studente = Studente.objects.get(pk=self.kwargs['pk'])
+        one = Partita.objects.filter(squadra_1__calciatori=studente).count()
+        two = Partita.objects.filter(squadra_2__calciatori=studente).count()
+        context['partite_count'] = one + two
         return context
 
 class ListPartite(ListView):
