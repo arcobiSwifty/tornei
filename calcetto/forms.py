@@ -20,3 +20,30 @@ class CreaPartita(forms.ModelForm):
             'squadra_2': 'seconda squadra',
             'data': 'data',
         }
+
+class CreaSquadra(forms.ModelForm):
+    studente_1 = forms.CharField(max_length=100, strip=True)
+    studente_2 = forms.CharField(max_length=100, strip=True)
+    studente_3 = forms.CharField(max_length=100, strip=True)
+    studente_4 = forms.CharField(max_length=100, strip=True)
+    studente_5 = forms.CharField(max_length=100, strip=True)
+    studente_6 = forms.CharField(max_length=100, strip=True, required=False)
+    studente_7 = forms.CharField(max_length=100, strip=True, required=False)
+    studente_8 = forms.CharField(max_length=100, strip=True, required=False)
+    studente_9 = forms.CharField(max_length=100, strip=True, required=False)
+    studente_10 = forms.CharField(max_length=100, strip=True, required=False)
+    class Meta:
+        model = Squadra
+        fields = ('classe', 'contatto')
+        labels = {
+            'studente_1': 'aggiungi giocatore',
+            'studente_2': 'aggiungi giocatore',
+            'studente_3': 'aggiungi giocatore',
+            'studente_4': 'aggiungi giocatore',
+            'studente_5': 'aggiungi giocatore',
+            'studente_6': 'aggiungi giocatore',
+            'studente_7': 'aggiungi giocatore',
+            'studente_8': 'aggiungi giocatore',
+            'studente_9': 'aggiungi giocatore',
+            'studente_10': 'aggiungi giocatore',
+        }

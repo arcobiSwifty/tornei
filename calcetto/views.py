@@ -11,7 +11,10 @@ from django.core.paginator import Paginator
 
 #todo implement scheduled tasks
 #implement classifica
-#implement cartellini e ammonizioni
+#IMPLEMENT GIRONI VISUALIZZATE
+#implement cartellini e ammonizion
+#FIX THE PAGINATION
+#grafica
 
 # Create your views here.
 class Main(View):
@@ -41,6 +44,21 @@ class ListPartite(ListView):
         data = super().get_context_data(**kwargs)
         data['is_staff'] = self.request.user.is_staff
         return data
+
+class ListSquadre(ListView):
+    queryset = Squadra.objects.order_by('score')
+    paginate_by = 20
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        data['is_staff'] = self.request.user.is_staff
+        return data
+
+class DetailSquadra(DetailView):
+    model = Squadra
+    def get_context_data(self, **kwargs):
+        context = super(DetailSquadra, self).get_context_data(**kwargs)
+        context['calciatori'] = Squadra.objects.get(pk=self.kwargs['pk']).calciatori.all()
+        return context
 
 class DetailPartite(DetailView):
     model = Partita
@@ -145,3 +163,21 @@ class CreatePartita(CreateView):
         partita.data = form.cleaned_data['data']
         partita.save()
         return super().form_valid(form)
+
+
+class CreateSquadra(View):
+    template_name = "calcetto/squadra_create.html"
+    def get(self, request):
+        form = CreaSquadra()
+        return render(request, self.template_name, {'form': form})
+    def post(self, request):
+        form = CreaSquadra(request.POST)
+        if form.is_valid():
+            squadra = form.save(commit=False)
+            squadra.save()
+            for i in range(1,11):
+                s = "studente_{}".format(i)
+                if form.cleaned_data[s] != "":
+                    squadra.calciatori.add(Studente.objects.create(nome=form.cleaned_data[s]))
+            squadra.save()
+        return redirect('/calcetto/squadre')
