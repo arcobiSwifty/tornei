@@ -10,6 +10,7 @@ urlpatterns = [
     path('calcetto', views.ListPartite.as_view()),
     path('calcetto/classifica', views.Classifica.as_view()),
     path('calcetto/studente/<int:pk>', views.StudenteDetail.as_view()),
+    path('accounts/login/',  auth_views.LoginView.as_view()),
     path('accounts/login',  auth_views.LoginView.as_view()),
     path('calcetto/squadre',  views.ListSquadre.as_view()),
     path('calcetto/squadra/<int:pk>',  views.DetailSquadra.as_view()),

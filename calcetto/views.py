@@ -9,10 +9,10 @@ from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.core.paginator import Paginator
 
-#todo implement scheduled tasks
-#implement classifica
+
+#implement classifica and scoring system
 #IMPLEMENT GIRONI VISUALIZZATE
-#implement cartellini e ammonizion
+#implement cartellini e ammonizioni
 #FIX THE PAGINATION
 #grafica
 

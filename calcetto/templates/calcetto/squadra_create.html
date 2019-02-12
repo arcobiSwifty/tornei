@@ -1,11 +1,13 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
-<form method="post" class="form form-control">
+<div class="container">
+  <h3>Aggiungi squadra</h3>
+  <form method="post" class="form form-control">
     {% csrf_token %}
     {{form.as_p}}
-    <button type="submit" name="button" class="btn btn-primary">Submit</button>
-</form>
+    <button type="submit" name="button" class="btn btn-primary">Crea</button>
+  </form>
+</div>
 
 {% endblock %}

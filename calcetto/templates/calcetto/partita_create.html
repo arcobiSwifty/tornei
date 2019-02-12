@@ -1,5 +1,12 @@
-<form method="post">
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+  <h3>Aggiungi partita</h3>
+  <form method="post">
     {% csrf_token %}
     {{form.as_p}}
-    <button type="submit" name="button">Submit</button>
-</form>
+    <button type="submit" name="button">Crea</button>
+  </form>
+</div>
+{% endblock %}
