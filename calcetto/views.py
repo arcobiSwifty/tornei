@@ -10,10 +10,6 @@ from django.views.generic.detail import DetailView
 from django.core.paginator import Paginator
 
 
-#implement cartellini e ammonizioni
-#FIX THE PAGINATION
-#grafica
-
 # Create your views here.
 class Main(View):
     def get(self, request):
