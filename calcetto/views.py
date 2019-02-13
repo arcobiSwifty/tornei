@@ -10,8 +10,6 @@ from django.views.generic.detail import DetailView
 from django.core.paginator import Paginator
 
 
-#implement classifica and scoring system
-#IMPLEMENT GIRONI VISUALIZZATE
 #implement cartellini e ammonizioni
 #FIX THE PAGINATION
 #grafica
@@ -99,8 +97,13 @@ class ArbitraPartite(View):
         partita = Partita.objects.get(pk=pk)
         squadra1 = partita.squadra_1
         squadra2 = partita.squadra_2
-        form.fields["giocatore"].queryset = squadra1.calciatori.all() | squadra2.calciatori.all()
-        return render(request, self.template_name, {'partita': partita, 'goals': partita.goals.all(), 'form': form, 'squadra1': squadra1.calciatori.all(), 'squadra2': squadra2.calciatori.all()})
+        giocatori = squadra1.calciatori.all() | squadra2.calciatori.all()
+        form.fields["giocatore"].queryset = giocatori
+        cartellini = {}
+        for s in giocatori:
+            if s.cartellini.count() > 0:
+                cartellini[s.nome] = s.cartellini.all()
+        return render(request, self.template_name, {'partita': partita, 'goals': partita.goals.all(), 'form': form, 'squadra1': squadra1.calciatori.all(), 'squadra2': squadra2.calciatori.all(), 'cartellini': cartellini})
     def post(self, request, pk):
         partita = Partita.objects.get(pk=pk)
         form = CreaGoal(request.POST)
@@ -181,3 +184,20 @@ class CreateSquadra(View):
                     squadra.calciatori.add(Studente.objects.create(nome=form.cleaned_data[s]))
             squadra.save()
         return redirect('/calcetto/squadre')
+
+class AggiungiCartellino(View):
+    template_name = 'calcetto/cartellino_create.html'
+    def get(self, request, pk):
+        form = CreaCartellino()
+        return render(request, self.template_name,{'form': form})
+    def post(self, request, pk):
+        partita = int(request.GET.get('partita'))
+        studente = Studente.objects.get(pk=pk)
+        form = CreaCartellino(request.POST)
+        if form.is_valid():
+            cartellino = form.save(commit=False)
+            cartellino.partita = Partita.objects.get(pk=partita)
+            cartellino.save()
+            studente.cartellini.add(cartellino)
+            studente.save()
+        return redirect('/calcetto/arbitra/{0}'.format(partita))

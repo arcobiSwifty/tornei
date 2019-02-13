@@ -9,6 +9,9 @@ class CreaGoal(forms.ModelForm):
             'minuto': 'realizzato al minuto',
             'giocatore': 'realizzato da'
         }
+        widgets = {
+            'minuto': forms.NumberInput(attrs={'placeholder': 'Inserisci il minuto'})
+        }
 
 class CreaPartita(forms.ModelForm):
     data = forms.DateTimeField(required=True, input_formats=['%d-%m-%Y %H:%M', '%d/%m/%Y %H:%M'])
@@ -47,3 +50,10 @@ class CreaSquadra(forms.ModelForm):
             'studente_9': 'aggiungi giocatore',
             'studente_10': 'aggiungi giocatore',
         }
+
+class CreaCartellino(forms.ModelForm):
+    class Meta:
+        model = Cartellino
+        fields = ('tipo',)
+        labels = {'tipo': 'Seleziona il tipo di cartellino'}
+        forms.TextInput(attrs={'placeholder': 'Inserisci il titolo...'})

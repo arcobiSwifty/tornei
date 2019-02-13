@@ -1,6 +1,12 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<style media="screen">
+  .squadre {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+</style>
 <div class="container">
   <h1>{{partita.squadra_1.classe}} vs {{partita.squadra_2.classe}}</h1>
   <p>{{partita.data|date}}, {{partita.data.hour|add:"1"}}:{% if partita.data.minute < 10 %}0{{partita.data.minute}}{% else %}{{partita.data.minute}}{% endif %}</p>
@@ -21,47 +27,85 @@
           <td>{{goal.squadra.classe}}</td>
           <td>{% if partita.finita == False %}<a href="/calcetto/elimina/{{goal.id}}/p?partita={{partita.id}}"><button class="btn btn-warning">Elimina</button></a> <a href="/calcetto/modifica/{{goal.id}}/p?partita={{partita.id}}"><button class="btn btn-danger">Modifica</button></a>{% endif %}</td>
         </tr>
+      {% empty %}
+        <tr>
+            Ancora non è stato effettuato nessun goal
+        </tr>
       {% endfor %}
     </tbody>
   </table>
-  Aggiungi un goal:
-  <form class="form form.control" action="/calcetto/arbitra/{{partita.id}}" method="post">
+  <div class="card">
+  <div class="card-header">
+  <h4>Aggiungi un goal:</h4>
+  </div>
+  <div class="card-body">
+  <form class="form" action="/calcetto/arbitra/{{partita.id}}" method="post">
     {% csrf_token %}
     {{form.as_p}}
-    <button type="submit" name="button">Aggiungi</button>
+    <button type="submit" name="button" class="btn btn-info">Aggiungi</button>
   </form>
-
-  <style media="screen">
-    .squadre {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-    }
-  </style>
+  </div>
+  </div>
   <br>
   {% if partita.finita == False %}
-  <a href="/calcetto/finisci/{{partita.id}}"><button class="btn btn-primary">Finisci Partita</button></a><br><br>
+    <a href="/calcetto/finisci/{{partita.id}}"><button class="btn btn-primary">Finisci Partita</button></a><br><br>
   {% endif %}
+  <div class="card">
+    <div class="card-header">
+      <h3>Giocatori presenti in questa partita</h3><br>
+    </div>
   <div class="squadre">
     <table class="table table-striped">
       <thead>
         <th>{{partita.squadra_1.classe}}</th>
+        <th></th>
       </thead>
       <tbody>
         {% for calciatore in squadra1 %}
-          <tr><td>{{calciatore.nome}}</td></tr>
+          <tr>
+            <td>{{calciatore.nome}}</td>
+            <td><a href="/calcetto/studente/cartellino/{{calciatore.id}}?partita={{partita.id}}"><button class="btn btn-warning">Attribuisci Cartellino</button></a></td>
+          </tr>
         {% endfor %}
       </tbody>
     </table>
     <table class="table table-striped">
       <thead>
         <th>{{partita.squadra_2.classe}}</th>
+        <th></th>
       </thead>
       <tbody>
         {% for calciatore in squadra2 %}
-        <tr><td>{{calciatore.nome}}</td></tr>
+        <tr>
+          <td>{{calciatore.nome}}</td>
+          <td><a href="/calcetto/studente/cartellino/{{calciatore.id}}?partita={{partita.id}}"><button class="btn btn-warning">Attribuisci Cartellino</button></a></td>
+        </tr>
         {% endfor %}
       </tbody>
     </table>
+  </div>
+  </div>
+  <br>
+  <div class="card">
+    <div class="card-header">
+      <h3>Cartellini assegnati in questa partita</h3><br>
+  </div>
+  <table class="table table-striped">
+    <thead>
+      <th>Nome</th>
+      <th>Tipo</th>
+    </thead>
+    {% for studente, cartellino in cartellini.items %}
+      <tr>
+        <td>{{studente}}</td>
+        <td>{{cartellino.tipo}}</td>
+      </tr>
+    {% empty %}
+      <tr>
+        Non è stato ancora assegnato un cartellino o un'ammonizione
+      </tr>
+    {% endfor %}
+  </table>
   </div>
 </div>
 

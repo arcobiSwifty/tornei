@@ -13,6 +13,7 @@ urlpatterns = [
     path('accounts/login/',  auth_views.LoginView.as_view()),
     path('accounts/login',  auth_views.LoginView.as_view()),
     path('calcetto/squadre',  views.ListSquadre.as_view()),
+    path('calcetto/studente/cartellino/<int:pk>', views.AggiungiCartellino.as_view()),
     path('calcetto/squadra/<int:pk>',  views.DetailSquadra.as_view()),
     path('calcetto/nuovasquadra/', staff_member_required(views.CreateSquadra.as_view())),
     path('calcetto/nuovapartita/', staff_member_required(views.CreatePartita.as_view())),

@@ -1,20 +1,25 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
+<br>
+<div class="container">
+<div class="card">
+  <div class="card-header">
+    <h3>Classifica individuale</h3>
+  </div>
 <table class="table table-striped">
   <thead>
     <tr>
       <th>Nome</th>
       <th>Goal</th>
-      <th>#</th>
+      <th width="20%">#</th>
     </tr>
   </thead>
 {% for studente in object_list %}
     <tr>
       <td>{{ studente.nome }}</td>
       <td>{{ studente.goals }}</td>
-      <td><a href="/calcetto/studente/{{studente.id}}"><button class="btn btn-secondary">Dettagli</button></a></td>
+      <td><a href="/calcetto/studente/{{studente.id}}"><button class="btn btn-info">Dettagli</button></a></td>
     </tr>
 {% empty %}
     <li>Non è ancora presente nessuna partita</li>
@@ -35,6 +40,6 @@
         </span>
     </div>
 {% endif %}
-
-
+</div>
+</div>
 {% endblock %}

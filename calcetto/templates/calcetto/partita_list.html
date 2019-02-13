@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
-<br><a href="/calcetto/classifica"><button class="btn btn-info">Classifica Giocatori</button></a>
-
+<div class="container">
+<br><a href="/calcetto/classifica"><button class="btn btn-info">Classifica Giocatori</button></a> <a href="/calcetto/squadre"><button class="btn btn-info">Visualizza le squadre</button></a>
+<br>
 <table class="table table-striped">
   <thead>
     <tr>
@@ -40,6 +40,7 @@
         </span>
     </div>
 {% endif %}
+</div>
 
 
 {% endblock %}
