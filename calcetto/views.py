@@ -10,7 +10,7 @@ from django.views.generic.detail import DetailView
 from django.core.paginator import Paginator
 
 
-# Create your views here.
+
 class Main(View):
     def get(self, request):
         return render(request, 'start.html', {'is_staff': self.request.user.is_staff})
