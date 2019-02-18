@@ -36,7 +36,7 @@ class ListPartite(ListView):
     paginate_by = 20
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
-        data['is_staff'] = self.request.user.is_staff
+        data['is_staff'] = self.request.user.is_authenticated
         return data
 
 class ListSquadre(ListView):
